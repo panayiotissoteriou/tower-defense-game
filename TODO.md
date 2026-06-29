@@ -4,14 +4,14 @@ TODO:
 - Collect cursor coordinates 
 - add a menu where you can click to select tower to build it
 - Add specific coordinates/square where you can build a tower 
-- Fix tower range appearing
-- 
+
 
 # 29-06-2026
-- Created display with the enemy path
+- Created display with enemy path
 - Towers now show up statically
 - One enemy shows up and moves along the path
 - Both enemies and towers appear as coloured circles
+- Tower range appearing
 
 # 26-06-2026
 Enemies should have health, attack, move.
