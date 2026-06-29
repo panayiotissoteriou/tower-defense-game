@@ -1,3 +1,8 @@
+# 29-06-2026
+Create display
+
+
+# 26-06-2026
 Enemies should have health, attack, move.
 
 # Display:

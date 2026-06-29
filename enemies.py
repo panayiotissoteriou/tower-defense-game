@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Enemy:
+class Enemy(ABC):
     def __init__(self):
         self.health = 50
         self.attack = 5
