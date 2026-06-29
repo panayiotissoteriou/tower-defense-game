@@ -36,10 +36,9 @@ while running:
     pygame.draw.line(screen, "gray82", (x1, y1), (x2, y2), 80)
 
     for tower, position in towers_built:
-        tower.draw_range(screen, tower.colour, 1, 36)
+        tower.position = [position[0], position[1]]
+        tower.draw_range(screen) #(40, 40, 105)
         tower.appear(screen, tower.colour, position, 25)
-
-        
 
     for enemy in enemies:
         enemy.move(enemy.move_by_x, enemy.move_by_y)
@@ -48,9 +47,7 @@ while running:
             pass #or break
         else:
             enemy.appear(screen, enemy.colour, enemy.position, 12)
-    
-    
-
+      
     pygame.display.flip()
     clock.tick(60)
 
