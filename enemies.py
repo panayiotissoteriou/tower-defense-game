@@ -15,9 +15,11 @@ class Enemy(ABC):
         # hit is a damage from a tower
         self.health -= hit
 
-    def attack_defender():
-        #not sure if needed, or if func in defender is needed
-        pass
+    @abstractmethod
+    def die(self, health):
+        #if 
+        if self.health <= 0:
+            self.position = [None,None]
     
     @abstractmethod
     def move(self, move_by_x, move_by_y):
@@ -41,6 +43,9 @@ class weakEnemy(Enemy):
 
     def appear(self, screen, colour, position, size=12):
         return super().appear(screen, self.colour, position, size)
+    
+    def die(self, health):
+        return super().die(health)
 
 
 class TankEnemy(Enemy):
