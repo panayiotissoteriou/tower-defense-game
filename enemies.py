@@ -10,6 +10,7 @@ class Enemy(ABC):
         self.move_by_x = 2
         self.move_by_y = 1.5
         self.appearance = ""
+        self.money_worth = 50
 
     def lose_health(self, hit):
         # hit is a damage from a tower

@@ -13,6 +13,7 @@ class Tower(ABC):
         self.appearance = ""
         self.attack_symbol = ""
         self.colour = ""
+        self.price = 50
 
     def get_build_position(self, ):
         # TODO: return the position where the tower is built
@@ -58,7 +59,7 @@ class ArtilleryTower(Tower):
         super().__init__()
         self.damage = self.damage + 10
         self.rate = self.rate / 2
-        self.colour = "firebrick1"
+        self.colour = "dodgerblue4"
 
     def appear(self, screen, colour, position, size=25):
         return super().appear(screen, self.colour, position, size)
@@ -79,4 +80,4 @@ class DefenderTower(Tower):
     def __init__(self):
         super().__init__()
         self.health = 50
-        self.colour = "gray59"
+        self.colour = "darkorange4"
