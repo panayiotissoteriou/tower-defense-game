@@ -42,7 +42,7 @@ class Tower(ABC):
         # TODO: if enemy within range, attack enemy with symbol
         pass
 
-    @abstractmethod
+    # @abstractmethod
     def appear(self, screen, colour, position, size=25):
         return pygame.draw.circle(screen, colour, position, size)
 
