@@ -6,8 +6,8 @@ class Enemy:
         self.health = 50
         self.attack = 5
         self.position = [5, 5]
-        self.move_by_x = 2
-        self.move_by_y = 1.5
+        self.move_by_x = 1
+        self.move_by_y = 0.75
         # self.appearance = ""
         self.money_worth = 50
         self.colour = "white"
@@ -50,6 +50,8 @@ class tankEnemy(Enemy):
     def __init__(self):
         super().__init__()
         self.health += 100
+        self.move_by_x /= 1.5
+        self.move_by_y /= 1.5
         # self.appearance = "O|O"
         self.colour = "blue"
 

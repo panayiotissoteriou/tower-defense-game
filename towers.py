@@ -14,6 +14,7 @@ class Tower:
         self.colour = ""
         self.price = 50
         self.range_coordinates = []
+        self.cooldown = 0
 
     def get_build_position(self):
         return None
@@ -46,9 +47,17 @@ class Tower:
         distance = math.hypot(enemy_x - tower_x, enemy_y - tower_y)
         return distance <= self.range
 
+    def update(self):
+        if self.cooldown > 0:
+            self.cooldown -= 1
+
     def attack_enemy(self, enemy):
+        if self.cooldown > 0:
+            return False
+
         if self.in_range(enemy.position):
             enemy.lose_health(self.damage)
+            self.cooldown = max(1, int(60 / max(1, self.rate)))
             return True
         return False
 
@@ -69,7 +78,7 @@ class ArrowTower(Tower):
 class ArtilleryTower(Tower):
     def __init__(self):
         super().__init__()
-        self.damage += 10
+        self.damage += 20
         self.rate /= 2
         self.colour = "dodgerblue4"
 
@@ -77,7 +86,7 @@ class ArtilleryTower(Tower):
 class MagicTower(Tower):
     def __init__(self):
         super().__init__()
-        self.damage += 5
+        self.damage += 15
         self.range += 5
         self.colour = "darkorchid"
 
