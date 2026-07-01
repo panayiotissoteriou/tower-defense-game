@@ -42,6 +42,7 @@ while running:
     # Clear the screen and draw the background and towers
     screen.fill((20, 20, 30))  # background color
     # Path on which enemies will move
+    # TODO: import path from 
     pygame.draw.line(screen, "gray82", (x1, y1), (x2, y2), 80)
 
     draw_ui(screen, money)
@@ -54,7 +55,7 @@ while running:
         tower.appear(screen, tower.colour, position, 25)
 
     # draw enemies and move them
-    for enemy in enemies:
+    for enemy in list(enemies):
         enemy.move(enemy.move_by_x, enemy.move_by_y)
         if enemy.health <= 0:
             enemies.remove(enemy)
@@ -62,13 +63,11 @@ while running:
             continue
 
         enemy.appear(screen, enemy.colour, enemy.position, 12)
+        enemy.draw_health(screen)
 
-        for tower, _ in towers_built:
-            if tower.attack_enemy(enemy):
-                break
-            # check if the enemy is within range of any tower and attack it
-            if enemy.position in tower.range_coordinates:
-                tower.attack_enemy(enemy.position[0], enemy.position[1])
+    for tower, _ in towers_built:
+        target = tower.acquire_target(enemies)
+        tower.attack_enemy(target)
 
     pygame.display.flip()
     clock.tick(60)

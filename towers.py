@@ -15,6 +15,7 @@ class Tower:
         self.price = 50
         self.range_coordinates = []
         self.cooldown = 0
+        self.target = None
 
     def get_build_position(self):
         return None
@@ -51,7 +52,24 @@ class Tower:
         if self.cooldown > 0:
             self.cooldown -= 1
 
+    def acquire_target(self, enemies):
+        if self.target is not None:
+            if self.target.health > 0 and self.in_range(self.target.position):
+                return self.target
+            self.target = None
+
+        for enemy in enemies:
+            if enemy.health > 0 and self.in_range(enemy.position):
+                self.target = enemy
+                return enemy
+
+        self.target = None
+        return None
+
     def attack_enemy(self, enemy):
+        if enemy is None or enemy.health <= 0:
+            return False
+
         if self.cooldown > 0:
             return False
 
