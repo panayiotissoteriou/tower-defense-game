@@ -43,7 +43,6 @@ class weakEnemy(Enemy):
         super().__init__()
         # self.appearance = "w|w"
         self.colour = "red"
-        self.points = 3
 
 
 class tankEnemy(Enemy):
@@ -54,6 +53,7 @@ class tankEnemy(Enemy):
         self.move_by_y /= 1.5
         # self.appearance = "O|O"
         self.colour = "blue"
+        self.money_worth *= 2
 
 
 class fastEnemy(Enemy):
@@ -63,3 +63,4 @@ class fastEnemy(Enemy):
         self.move_by_y += 1
         # self.appearance = "(|)"
         self.colour = "yellow"
+        self.money_worth *= 1.2
