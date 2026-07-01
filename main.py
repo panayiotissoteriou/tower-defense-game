@@ -55,8 +55,17 @@ while running:
         enemy.move(enemy.move_by_x, enemy.move_by_y)
         if enemy.health <= 0:
             enemies.remove(enemy)
-        else:
-            enemy.appear(screen, enemy.colour, enemy.position, 12)
+            continue
+
+        enemy.appear(screen, enemy.colour, enemy.position, 12)
+
+        for tower, _ in towers_built:
+            if tower.attack_enemy(enemy):
+                break
+            # check if the enemy is within range of any tower and attack it
+            print(tower.range_coordinates)
+            if enemy.position in tower.range_coordinates:
+                tower.attack_enemy(enemy.position[0], enemy.position[1])
 
     pygame.display.flip()
     clock.tick(60)

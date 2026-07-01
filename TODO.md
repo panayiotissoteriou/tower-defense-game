@@ -2,7 +2,7 @@
 TODO:
 - Towers can attack if enemies in range and enemies lose health
 - Collect cursor coordinates 
-- add a menu where you can click to select tower to build it
+- add a menu where you can click to select tower to build
 - Add specific coordinates/square where you can build a tower 
 
 

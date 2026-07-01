@@ -2,24 +2,24 @@ from abc import ABC, abstractmethod
 import math
 import pygame
 
+
 class Tower(ABC):
-    # self.position = position
     def __init__(self):
         self.damage = 5
         self.level = 1
-        self.range = 50
+        self.range = 100
         self.rate = 5
         self.position = [None, None]
         self.appearance = ""
         self.attack_symbol = ""
         self.colour = ""
         self.price = 50
+        self.range_coordinates = []
 
-    def get_build_position(self, ):
-        # TODO: return the position where the tower is built
+    def get_build_position(self):
         pass
 
-    def _get_range_points(self, steps=36):
+    def _get_range_points(self, radius, steps=36):
         if self.position[0] is None or self.position[1] is None:
             return []
 
@@ -27,22 +27,34 @@ class Tower(ABC):
         points = []
         for i in range(steps):
             angle = 2 * math.pi * i / steps
-            x = center_x + self.range * math.cos(angle)
-            y = center_y + self.range * math.sin(angle)
+            x = center_x + radius * math.cos(angle)
+            y = center_y + radius * math.sin(angle)
             points.append((x, y))
-        return points
+
+        self.range_coordinates = points
+        return self.range_coordinates
 
     def draw_range(self, screen, colour=(255, 255, 255), width=1, steps=36):
-        points = self._get_range_points(steps=steps)
+        points = self._get_range_points(self.range, steps=steps)
         if points:
             pygame.draw.lines(screen, colour, True, points, width)
             pygame.draw.lines(screen, (255, 255, 255, 80), True, points, 1)
 
-    def attack_enemy(self, enemy_position_x, enemy_position_y):
-        # TODO: if enemy within range, attack enemy with symbol
-        pass
+    def in_range(self, enemy_position):
+        if self.position[0] is None or self.position[1] is None:
+            return False
 
-    # @abstractmethod
+        tower_x, tower_y = self.position
+        enemy_x, enemy_y = enemy_position
+        distance = math.hypot(enemy_x - tower_x, enemy_y - tower_y)
+        return distance <= self.range
+
+    def attack_enemy(self, enemy):
+        if self.in_range(enemy.position):
+            enemy.lose_health(self.damage)
+            return True
+        return False
+
     def appear(self, screen, colour, position, size=25):
         return pygame.draw.circle(screen, colour, position, size)
 
@@ -50,9 +62,13 @@ class ArrowTower(Tower):
     def __init__(self):
         super().__init__()
         self.colour = "darkgoldenrod1"
+        self.range_coordinates = self._get_range_points(self.range_coordinates, steps=36)
     
     def appear(self, screen, colour, position, size=25):
         return super().appear(screen, self.colour, position, size)
+    
+    def get_range_coordinates(self):
+        return super()._get_range_points(self, self.range, steps=36)
 
 class ArtilleryTower(Tower):
     def __init__(self):
