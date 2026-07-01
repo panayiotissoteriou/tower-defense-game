@@ -3,12 +3,12 @@
 - Money increases when an enemy is killed
 - Towers don't shoot every frame
 - Adjust money worth per enemy type
+- Towers can attack one enemy at a time
+- Show enemy health
 
 TODO:
 - Add specific coordinates/square where you can build a tower
 - clicking to select
-- Towers can attack one enemy at a time
-- Show enemy health
 - Create an enemy path that is not just a diagonal
 - Introduce some randomness in enemy path
 - Move level definitions and paths into a separate static file so different levels can store their own paths and enemy waves

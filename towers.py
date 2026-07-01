@@ -16,6 +16,8 @@ class Tower:
         self.range_coordinates = []
         self.cooldown = 0
         self.target = None
+        self.projectiles = []
+        self.projectile_speed = 12
 
     def get_build_position(self):
         return None
@@ -52,6 +54,29 @@ class Tower:
         if self.cooldown > 0:
             self.cooldown -= 1
 
+    def update_projectiles(self, screen):
+        for projectile in list(self.projectiles):
+            target = projectile["target"]
+            if target is None or target.health <= 0:
+                self.projectiles.remove(projectile)
+                continue
+
+            start_x, start_y = projectile["position"]
+            target_x, target_y = target.position
+            dx = target_x - start_x
+            dy = target_y - start_y
+            distance = math.hypot(dx, dy)
+
+            if distance <= self.projectile_speed:
+                target.lose_health(projectile["damage"])
+                self.projectiles.remove(projectile)
+                continue
+
+            step_x = dx / distance * self.projectile_speed
+            step_y = dy / distance * self.projectile_speed
+            projectile["position"] = [start_x + step_x, start_y + step_y]
+            pygame.draw.circle(screen, projectile["colour"], (int(projectile["position"][0]), int(projectile["position"][1])), 4)
+
     def acquire_target(self, enemies):
         if self.target is not None:
             if self.target.health > 0 and self.in_range(self.target.position):
@@ -74,7 +99,12 @@ class Tower:
             return False
 
         if self.in_range(enemy.position):
-            enemy.lose_health(self.damage)
+            self.projectiles.append({
+                "position": [self.position[0], self.position[1]],
+                "target": enemy,
+                "damage": self.damage,
+                "colour": self.colour,
+            })
             self.cooldown = max(1, int(60 / max(1, self.rate)))
             return True
         return False

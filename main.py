@@ -53,6 +53,7 @@ while running:
         tower.position = [position[0], position[1]]
         tower.draw_range(screen)
         tower.appear(screen, tower.colour, position, 25)
+        tower.update_projectiles(screen)
 
     # draw enemies and move them
     for enemy in list(enemies):
