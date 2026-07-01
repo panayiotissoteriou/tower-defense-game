@@ -17,12 +17,14 @@ clock = pygame.time.Clock()
 # Create game objects once before the loop
 # so their position changes persist between frames.
 towers_built = [
-    (towers.ArrowTower(), (100, 200)),
-    (towers.ArtilleryTower(), (300, 400)),
-    (towers.MagicTower(), (500, 500)),
+    (towers.ArrowTower(), (150, 200)),
+    (towers.ArtilleryTower(), (425, 400)),
+    (towers.MagicTower(), (700, 600)),
 ]
 enemies = [
     enemies.weakEnemy(),
+    enemies.tankEnemy(),
+    enemies.fastEnemy(),
 ]
 money = 100
 

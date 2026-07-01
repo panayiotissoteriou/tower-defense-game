@@ -1,62 +1,63 @@
-from abc import ABC, abstractmethod
 import pygame
 
-class Enemy(ABC):
+
+class Enemy:
     def __init__(self):
         self.health = 50
         self.attack = 5
-        self.position = [5,5]
-        self.x_or_y = "x"
+        self.position = [5, 5]
         self.move_by_x = 2
         self.move_by_y = 1.5
-        self.appearance = ""
+        # self.appearance = ""
         self.money_worth = 50
+        self.colour = "white"
 
     def lose_health(self, hit):
-        # hit is a damage from a tower
         self.health -= hit
 
-    @abstractmethod
-    def die(self, health):
-        #if 
+    def die(self):
         if self.health <= 0:
-            self.position = [None,None]
-    
-    @abstractmethod
-    def move(self, move_by_x, move_by_y):
-        # TODO: introduce some randomness, and somehow to always be going in the correct direction
+            self.position = [None, None]
+            return True
+        return False
+
+    def move(self, move_by_x=None, move_by_y=None):
+        if move_by_x is None:
+            move_by_x = self.move_by_x
+        if move_by_y is None:
+            move_by_y = self.move_by_y
+
         self.position = [self.position[0] + move_by_x, self.position[1] + move_by_y]
         return self.position
 
-    @abstractmethod
-    def appear(self, screen, colour, position, size=12):
+    def appear(self, screen, colour=None, position=None, size=12):
+        if colour is None:
+            colour = self.colour
+        if position is None:
+            position = self.position
         return pygame.draw.circle(screen, colour, position, size)
+
 
 class weakEnemy(Enemy):
     def __init__(self):
         super().__init__()
-        self.appearance = "w|w"
+        # self.appearance = "w|w"
         self.colour = "red"
         self.points = 3
 
-    def move(self, move_by_x, move_by_y):
-        return super().move(move_by_x, move_by_y)
 
-    def appear(self, screen, colour, position, size=12):
-        return super().appear(screen, self.colour, position, size)
-    
-    def die(self, health):
-        return super().die(health)
-
-
-class TankEnemy(Enemy):
+class tankEnemy(Enemy):
     def __init__(self):
         super().__init__()
-        self.health += 50
-        self.appearance = "O|O"
+        self.health += 100
+        # self.appearance = "O|O"
+        self.colour = "blue"
 
-class FastEnemy(Enemy):
+
+class fastEnemy(Enemy):
     def __init__(self):
         super().__init__()
-        self.move_by += 1
-        self.appearance = "(|)"
+        self.move_by_x += 1
+        self.move_by_y += 1
+        # self.appearance = "(|)"
+        self.colour = "yellow"

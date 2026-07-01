@@ -1,9 +1,8 @@
-from abc import ABC, abstractmethod
 import math
 import pygame
 
 
-class Tower(ABC):
+class Tower:
     def __init__(self):
         self.damage = 5
         self.level = 1
@@ -17,7 +16,7 @@ class Tower(ABC):
         self.range_coordinates = []
 
     def get_build_position(self):
-        pass
+        return None
 
     def _get_range_points(self, radius, steps=36):
         if self.position[0] is None or self.position[1] is None:
@@ -27,9 +26,8 @@ class Tower(ABC):
         points = []
         for i in range(steps):
             angle = 2 * math.pi * i / steps
-            x = center_x + radius * math.cos(angle)
-            y = center_y + radius * math.sin(angle)
-            points.append((x, y))
+            points.append((center_x + radius * math.cos(angle), 
+                           center_y + radius * math.sin(angle)))
 
         self.range_coordinates = points
         return self.range_coordinates
@@ -38,7 +36,6 @@ class Tower(ABC):
         points = self._get_range_points(self.range, steps=steps)
         if points:
             pygame.draw.lines(screen, colour, True, points, width)
-            pygame.draw.lines(screen, (255, 255, 255, 80), True, points, 1)
 
     def in_range(self, enemy_position):
         if self.position[0] is None or self.position[1] is None:
@@ -55,44 +52,37 @@ class Tower(ABC):
             return True
         return False
 
-    def appear(self, screen, colour, position, size=25):
+    def appear(self, screen, colour=None, position=None, size=25):
+        if colour is None:
+            colour = self.colour
+        if position is None:
+            position = self.position
         return pygame.draw.circle(screen, colour, position, size)
+
 
 class ArrowTower(Tower):
     def __init__(self):
         super().__init__()
         self.colour = "darkgoldenrod1"
-        self.range_coordinates = self._get_range_points(self.range_coordinates, steps=36)
-    
-    def appear(self, screen, colour, position, size=25):
-        return super().appear(screen, self.colour, position, size)
-    
-    def get_range_coordinates(self):
-        return super()._get_range_points(self, self.range, steps=36)
+
 
 class ArtilleryTower(Tower):
     def __init__(self):
         super().__init__()
-        self.damage = self.damage + 10
-        self.rate = self.rate / 2
+        self.damage += 10
+        self.rate /= 2
         self.colour = "dodgerblue4"
-
-    def appear(self, screen, colour, position, size=25):
-        return super().appear(screen, self.colour, position, size)
 
 
 class MagicTower(Tower):
     def __init__(self):
         super().__init__()
-        self.damage = self.damage + 5
-        self.range = self.range + 5
+        self.damage += 5
+        self.range += 5
         self.colour = "darkorchid"
 
-    def appear(self, screen, colour, position, size=25):
-        return super().appear(screen, self.colour, position, size)
 
 class DefenderTower(Tower):
-    # builds a wall
     def __init__(self):
         super().__init__()
         self.health = 50

@@ -1,9 +1,11 @@
-# 30-06-2026
-TODO:
+# 01-07-2026
 - Towers can attack if enemies in range and enemies lose health
+- Add specific coordinates/square where you can build a tower?
+
+# 30-06-2026
 - Collect cursor coordinates 
 - add a menu where you can click to select tower to build
-- Add specific coordinates/square where you can build a tower 
+
 
 
 # 29-06-2026
