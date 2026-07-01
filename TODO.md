@@ -4,6 +4,7 @@
 - Towers don't shoot every frame
 - Adjust money worth per enemy type
 - Towers can attack one enemy at a time
+- Towers throw projectiles towards enemies
 - Show enemy health
 
 TODO:
