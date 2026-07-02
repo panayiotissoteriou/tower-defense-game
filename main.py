@@ -1,6 +1,7 @@
 import enemies
 from ui import draw_ui, get_clicked_button
 from towers import *
+from levels import LEVELS
 import pygame
 import towers
 
@@ -14,6 +15,10 @@ screen = pygame.display.set_mode((x2, y2))
 pygame.display.set_caption("Tower Defense")
 clock = pygame.time.Clock()
 
+current_level = LEVELS["default"]
+path = current_level["path"]
+build_spots = current_level["build_spots"]
+
 # Create game objects once before the loop
 # so their position changes persist between frames.
 towers_built = [
@@ -24,7 +29,10 @@ towers_built = [
 enemies = [
     enemies.weakEnemy(),
     enemies.tankEnemy(),
-    enemies.fastEnemy(),]*4
+    enemies.fastEnemy(),
+]
+for enemy in enemies:
+    enemy.set_path(path)
 money = 100
 
 # Game loop
@@ -41,9 +49,13 @@ while running:
 
     # Clear the screen and draw the background and towers
     screen.fill((20, 20, 30))  # background color
-    # Path on which enemies will move
-    # TODO: import path from 
-    pygame.draw.line(screen, "gray82", (x1, y1), (x2, y2), 80)
+
+    if path:
+        pygame.draw.lines(screen, "gray82", False, path, 70)
+
+    for spot in build_spots:
+        rect = pygame.Rect(spot["x"] - spot["size"] // 2, spot["y"] - spot["size"] // 2, spot["size"], spot["size"])
+        pygame.draw.rect(screen, (120, 120, 120), rect, 2)
 
     draw_ui(screen, money)
 
@@ -57,7 +69,7 @@ while running:
 
     # draw enemies and move them
     for enemy in list(enemies):
-        enemy.move(enemy.move_by_x, enemy.move_by_y)
+        enemy.move()
         if enemy.health <= 0:
             enemies.remove(enemy)
             money += enemy.money_worth

@@ -1,3 +1,4 @@
+import math
 import pygame
 
 
@@ -9,6 +10,10 @@ class Enemy:
         self.position = [5, 5]
         self.move_by_x = 1
         self.move_by_y = 0.75
+        self.path = None
+        self.path_index = 0
+        self.path_speed = 2.0
+        self.target_point = None
         # self.appearance = ""
         self.money_worth = 50
         self.colour = "white"
@@ -23,7 +28,47 @@ class Enemy:
             return True
         return False
 
+    def set_path(self, path):
+        if not path:
+            self.path = []
+            self.path_index = 0
+            self.target_point = None
+            return
+
+        self.path = [list(point) for point in path]
+        self.path_index = 1
+        if len(self.path) > 1:
+            self.position = list(self.path[0])
+            self.target_point = self.path[1]
+        else:
+            self.position = list(self.path[0])
+            self.target_point = self.path[0]
+
     def move(self, move_by_x=None, move_by_y=None):
+        if self.path and len(self.path) > 1:
+            if self.target_point is None:
+                self.target_point = self.path[1]
+
+            target_x, target_y = self.target_point
+            current_x, current_y = self.position
+            dx = target_x - current_x
+            dy = target_y - current_y
+            distance = math.hypot(dx, dy)
+
+            if distance <= self.path_speed:
+                self.position = [target_x, target_y]
+                self.path_index += 1
+                if self.path_index < len(self.path):
+                    self.target_point = self.path[self.path_index]
+                else:
+                    self.target_point = self.path[-1]
+                return self.position
+
+            step_x = dx / distance * self.path_speed
+            step_y = dy / distance * self.path_speed
+            self.position = [current_x + step_x, current_y + step_y]
+            return self.position
+
         if move_by_x is None:
             move_by_x = self.move_by_x
         if move_by_y is None:
