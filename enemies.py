@@ -14,6 +14,8 @@ class Enemy:
         self.path_index = 0
         self.path_speed = 2.0
         self.target_point = None
+        self.spawn_offset = 0.0
+        self.spawn_gap = 10.0
         # self.appearance = ""
         self.money_worth = 50
         self.colour = "white"
@@ -44,6 +46,9 @@ class Enemy:
             self.position = list(self.path[0])
             self.target_point = self.path[0]
 
+        if getattr(self, "spawn_offset", 0.0) < 0:
+            self.spawn_offset = 0.0
+
     def move(self, move_by_x=None, move_by_y=None):
         if self.path and len(self.path) > 1:
             if self.target_point is None:
@@ -54,6 +59,20 @@ class Enemy:
             dx = target_x - current_x
             dy = target_y - current_y
             distance = math.hypot(dx, dy)
+
+            if self.spawn_offset > 0:
+                if distance <= self.spawn_offset:
+                    self.spawn_offset = 0.0
+                else:
+                    step_scale = min(self.spawn_offset, self.path_speed)
+                    self.spawn_offset -= step_scale
+                    move_x = dx / distance * step_scale
+                    move_y = dy / distance * step_scale
+                    self.position = [current_x + move_x, current_y + move_y]
+                    return self.position
+
+            if self.spawn_offset == 0 and self.path_index == 1:
+                self.path_index = 1
 
             if distance <= self.path_speed:
                 self.position = [target_x, target_y]
